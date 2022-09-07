@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt-5">
   <div class="row">
     <section class="col-3">
       <h5 class="text-warning ml-3 my-3">Sort</h5>
@@ -38,21 +38,25 @@
     <section class="col-9">
       <div class="d-flex justify-content-between align-items-center pb-2">
         <app-paging-header
-        [totalCount]="totalCount"
-        [pageSize]="this.shopParams.pageSize"
-        [pageNumber]="this.shopParams.pageNumber"
+          [totalCount]="totalCount"
+          [pageSize]="this.shopParams.pageSize"
+          [pageNumber]="this.shopParams.pageNumber"
         ></app-paging-header>
         <div class="form-inline mt-2">
           <input
-          (keyup.enter)="onSearch()"
+            (keyup.enter)="onSearch()"
             type="text"
             class="form-control mr-2"
             #search
             style="width: 300px"
             placeholder="Search"
           />
-          <button (click)="onSearch()" class="btn btn-outline-primary my-2">Search</button>
-          <button (click)="onReset()" class="btn btn-outline-success my-2 ml-2">Reset</button>
+          <button (click)="onSearch()" class="btn btn-outline-primary my-2">
+            Search
+          </button>
+          <button (click)="onReset()" class="btn btn-outline-success my-2 ml-2">
+            Reset
+          </button>
         </div>
       </div>
       <div class="row">
@@ -64,7 +68,7 @@
         <app-pager
           [pageSize]="shopParams.pageSize"
           [totalCount]="totalCount"
-          (pageChanged)="onPageChanged"
+          (pageChanged)="(onPageChanged)"
         ></app-pager>
       </div>
     </section>
