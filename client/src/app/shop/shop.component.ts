@@ -11,7 +11,7 @@ import { ShopService } from './shop.service';
   styleUrls: ['./shop.component.scss'],
 })
 export class ShopComponent implements OnInit {
-  @ViewChild("search",{static:true}) searchTerm: ElementRef;
+  @ViewChild('search', { static: false }) searchTerm: ElementRef;
   products: IProduct[];
   brands: IBrand[];
   types: IType[];
@@ -85,19 +85,19 @@ export class ShopComponent implements OnInit {
   }
 
   onPageChanged(event: any) {
-    if(this.shopParams.pageNumber !== event){
+    if (this.shopParams.pageNumber !== event) {
       this.shopParams.pageNumber = event;
       this.getProducts();
     }
   }
-  onSearch(){
+  onSearch() {
     this.shopParams.search = this.searchTerm.nativeElement.value;
     this.shopParams.pageNumber = 1;
     this.getProducts();
   }
 
-  onReset(){
-    this.searchTerm.nativeElement.value = "";
+  onReset() {
+    this.searchTerm.nativeElement.value = '';
     this.shopParams = new ShopParams();
     this.getProducts();
   }
