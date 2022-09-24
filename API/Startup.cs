@@ -3,63 +3,73 @@ using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API
 {
-    public class Startup
-    {
-        private readonly IConfiguration _config;
-        public Startup(IConfiguration config)
-        {
-            _config = config;
-        }
+	public class Startup
+	{
+		private readonly IConfiguration _config;
+		public Startup(IConfiguration config)
+		{
+			_config = config;
+		}
 
-        public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(MappingProfiles));
-            services.AddControllers();
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddAutoMapper(typeof(MappingProfiles));
+			services.AddControllers();
 
-            services.AddDbContext<StoreContext>(x =>
-                x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+			services.AddDbContext<StoreContext>(x =>
+				x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
-            services.AddApplicationServices();
-            services.AddSwaggerDocumentation();
+			services.AddSingleton<IConnectionMultiplexer>(c =>
+			{
+				var configuration = ConfigurationOptions.Parse(_config
+					.GetConnectionString("Redis"), true);
 
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyHeader().AllowAnyHeader().WithOrigins("https://localhost:4200");
-                });
-            });
-        }
+				return ConnectionMultiplexer.Connect(configuration);
+			});
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseSwaggerDocumentation();
+			services.AddApplicationServices();
+			services.AddSwaggerDocumentation();
 
-            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+			services.AddCors(opt =>
+			{
+				opt.AddPolicy("CorsPolicy", policy =>
+				{
+					policy.AllowAnyHeader().AllowAnyHeader().WithOrigins("https://localhost:4200");
+				});
+			});
+		}
 
-            app.UseHttpsRedirection();
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseRouting();
+			app.UseSwaggerDocumentation();
 
-            app.UseStaticFiles();
+			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-            app.UseCors("CorsPolicy");
+			app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+			app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
+			app.UseStaticFiles();
+
+			app.UseCors("CorsPolicy");
+
+			app.UseAuthorization();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
+		}
+	}
 }
