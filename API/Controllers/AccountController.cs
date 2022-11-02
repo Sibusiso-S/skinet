@@ -39,7 +39,7 @@ namespace API.Controllers
 			{
 				Email = user.Email,
 				Token = _tokenService.CreateToken(user),
-				Displayname = user.DisplayName
+				DisplayName = user.DisplayName
 			};
 		}
 
@@ -90,7 +90,7 @@ namespace API.Controllers
 			{
 				Email = user.Email,
 				Token = _tokenService.CreateToken(user),
-				Displayname = user.DisplayName
+				DisplayName = user.DisplayName
 			};
 		}
 
@@ -103,7 +103,7 @@ namespace API.Controllers
 			}
 			var user = new AppUser
 			{
-				DisplayName = registerDto.Displayname,
+				DisplayName = registerDto.DisplayName,
 				Email = registerDto.Email,
 				UserName = registerDto.Email
 			};
@@ -116,7 +116,7 @@ namespace API.Controllers
 			{
 				Email = user.Email,
 				Token = _tokenService.CreateToken(user),
-				Displayname = user.DisplayName
+				DisplayName = user.DisplayName
 			};
 		}
 	}
