@@ -30,7 +30,7 @@ namespace Core.Entities.OrderAggregate
 
 		public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
-		public string PaymentIntentId { get; set; }
+		public string PaymentIntentId { get; set; } = "1";
 
 		public decimal GetTotal()
 		{
